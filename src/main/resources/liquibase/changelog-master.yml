@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/scripts/lots.sql
+  - include:
+      file: liquibase/scripts/bids.sql
