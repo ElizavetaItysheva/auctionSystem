@@ -10,13 +10,17 @@ import com.example.auctionsystem.model.status.LotStatus;
 import com.example.auctionsystem.projections.FrequentView;
 import com.example.auctionsystem.repository.BidRepository;
 import com.example.auctionsystem.repository.LotRepository;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LotService {
@@ -79,11 +83,40 @@ public class LotService {
         }
         return needed;
     }
-//    public String export() throws IOException {
-//
-//
-//
-//    }
+    public List<FullLotDTO> getAllFullLots(){
+       return lotRepository.findAll().stream()
+                .map(FullLotDTO::fromLot)
+                .collect(Collectors.toList());
+    }
+    public  void export(HttpServletResponse response) throws IOException {
+        List<FullLotDTO> lots = getAllFullLots();
+        StringWriter sw = new StringWriter();
+        CSVPrinter printer = new CSVPrinter(sw, CSVFormat.DEFAULT);
+        lots.stream()
+                .forEach(fullLotDTO -> {
+                    try{
+                        printer.printRecord(
+                                fullLotDTO.getId(),
+                                fullLotDTO.getStatus(),
+                                fullLotDTO.getTitle(),
+                                fullLotDTO.getDescription(),
+                                fullLotDTO.getStartPrice(),
+                                fullLotDTO.getBidPrice(),
+                                fullLotDTO.getCurrentPrice(),
+                                fullLotDTO.getLastBid().getBidderName());
+                    } catch (IOException e){
+                        throw new RuntimeException(e);
+                }
+        });
+                        printer.flush();
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"lots.csv\"");
+
+        PrintWriter pw = response.getWriter();
+        pw.write(sw.toString());
+        pw.flush();
+        pw.close();
+    }
     public Lot findLotById(Long id){
         return lotRepository.findById(id).get();
     }

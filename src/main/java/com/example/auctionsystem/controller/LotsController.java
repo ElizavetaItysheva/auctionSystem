@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping("lots")
@@ -151,9 +153,9 @@ public class LotsController {
     /*
     Экспортировать все лоты в формате id,title,status,lastBidder,currentPrice в одном файле CSV
      */
-//    @GetMapping("lot/export")
-//    public ResponseEntity<String> exportLots(){
-//        return lotService.export();
-//    }
+    @GetMapping("lot/export")
+    public void exportLots( HttpServletResponse response ) throws IOException {
+       lotService.export(response);
+    }
 
 }

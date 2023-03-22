@@ -1,5 +1,6 @@
 package com.example.auctionsystem.model;
 
+import com.example.auctionsystem.dto.BidDTO;
 import com.example.auctionsystem.model.status.LotStatus;
 
 import javax.persistence.*;
@@ -28,6 +29,12 @@ public class Lot {
         } else {
             return (bids.size() * bidPrice) + startPrice;
         }
+    }
+    public BidDTO getLastBid(){
+        if(this.getBids() == null || this.getBids().size() == 0){
+            return new BidDTO("clear", "clear");
+        }
+           return BidDTO.fromBid(this.getBids().get(this.getBids().size()-1));
     }
 
     public List<Bid> getBids() {

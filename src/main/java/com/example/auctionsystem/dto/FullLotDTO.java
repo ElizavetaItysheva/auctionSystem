@@ -23,7 +23,7 @@ public class FullLotDTO {
         dto.setStartPrice(lot.getStartPrice());
         dto.setBidPrice(lot.getBidPrice());
         dto.setCurrentPrice(lot.getCurrentPrice());
-        dto.setLastBid(BidDTO.fromBid(lot.getBids().get(lot.getBids().size()-1)));
+        dto.setLastBid(lot.getLastBid());
         return dto;
     }
 

@@ -20,6 +20,10 @@ public class BidDTO {
 
     public BidDTO() {
     }
+    public BidDTO(String bidderName, String bidDate){
+        this.bidderName = bidderName;
+        this.bidDate = bidDate;
+    }
 
     public String getBidderName() {
         return bidderName;
