@@ -1,5 +1,6 @@
 package com.example.auctionsystem.model;
 
+import com.example.auctionsystem.dto.BidDTO;
 import com.example.auctionsystem.model.status.LotStatus;
 
 import javax.persistence.*;
@@ -12,7 +13,8 @@ public class Lot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lot_id")
     private Long id;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private LotStatus status;
     private String title;
     private String description;
     private Integer startPrice;
@@ -22,12 +24,12 @@ public class Lot {
 
     public Lot() {
     }
-    public Integer getCurrentPrice(){
-        if(this.getStatus().equals(LotStatus.CREATED.toString())){
-            return startPrice;
-        } else {
-            return (bids.size() * bidPrice) + startPrice;
+
+    public BidDTO getLastBid(){
+        if(this.getBids() == null || this.getBids().size() == 0){
+            return new BidDTO("clear", "clear");
         }
+           return BidDTO.fromBid(this.getBids().get(this.getBids().size()-1));
     }
 
     public List<Bid> getBids() {
@@ -46,11 +48,11 @@ public class Lot {
         this.id = id;
     }
 
-    public String getStatus() {
+    public LotStatus getStatus() {
         return status;
     }
 
-    public void setStatus( String status ) {
+    public void setStatus( LotStatus status ) {
         this.status = status;
     }
 
