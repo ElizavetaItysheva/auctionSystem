@@ -1,10 +1,11 @@
 package com.example.auctionsystem.dto;
 
 import com.example.auctionsystem.model.Lot;
+import com.example.auctionsystem.model.status.LotStatus;
 
 public class LotDTO {
     private Long id;
-    private String status;
+    private LotStatus status;
     private String title;
     private String description;
     private Integer startPrice;
@@ -31,11 +32,11 @@ public class LotDTO {
         this.id = id;
     }
 
-    public String getStatus() {
+    public LotStatus getStatus() {
         return status;
     }
 
-    public void setStatus( String status ) {
+    public void setStatus( LotStatus status ) {
         this.status = status;
     }
 
